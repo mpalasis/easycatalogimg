@@ -21,8 +21,10 @@ Designed on Magento's RWD theme.
 - regular Desktop (assumes >700px but allows fallback to max-width:100%).
 - TODO: mobile horizontal (~640px) needs some tweaking to look good.
  
-Restrictions: html uses div Ids and css/js selectors use div Ids, so can only use one widget per page and keep HTML valid.
-(if you need multiple of these in any one page, then you need to modify where appropriate. It'll look bad though)
+Restrictions:
+============
+HTML uses div Ids and css/js selectors use div Ids, so can only use **one widget per page** and keep HTML valid.
+(if you need multiple of them in any page, then you need to modify where appropriate. But, IMHO, the page will be too busy... and ugly)
 
 
 
