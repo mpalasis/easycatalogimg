@@ -6,6 +6,7 @@
                 <type>skin_css</type>
                 <name>tm/easycatalogimg/css/styles.css</name>
             </action>
+            <action method="addItem"><type>skin_js</type><name>tm/easycatalogimg/js/jcarousel-widget.js</name></action>
         </reference>
     </default>
 
