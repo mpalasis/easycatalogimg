@@ -1,0 +1,121 @@
+<?php
+$_categories = $this->getCategories();
+$_collectionSize = count($_categories);
+
+if (!$_collectionSize) :
+  return;
+endif;
+
+$imager = Mage::helper('easycatalogimg/image');
+if ($background = $this->getBackgroundColor()) :
+  $imager->setBackgroundColor($background);
+endif;
+
+//$columnsCount = $this->getColumnCount() ? $this->getColumnCount() : 2;
+$showImage = $this->getShowImage();
+$height = $this->getImageHeight();
+$width = $this->getImageWidth();
+$maxCategoryCount = $this->getCategoryCount();
+$maxSubcategoryCount = $this->getSubcategoryCount();
+$i = 0;
+?>
+
+<div id="easycatalogimg-jcarousel">
+  <?php if (!$_collectionSize): ?>
+    <div class="note-msg">
+      <?php echo $this->__('There are no categories matching the selection. Please provide a category ID.') ?>
+    </div>
+  <?php else: ?>
+    <div class="jcarousel-wrapper clearfix">
+      <div class="jcarousel-control-prev-wrapper"><a href="#" class="jcarousel-control-prev">&lsaquo;</a></div>
+      <div class="jcarousel-control-next-wrapper"><a href="#" class="jcarousel-control-next">&rsaquo;</a></div>
+      <div id="categories-carousel" class="jcarousel">
+        <ul>
+          <?php foreach ($_categories as $_category): ?>
+            <?php
+            if ($i >= $maxCategoryCount): break;
+            endif;
+            $i++;
+            ?>
+            <li class="jcarousel-tile">
+              <div class="tile-image">
+                <?php if ($showImage) : ?>
+                  <a href="<?php echo $_category->getUrl() ?>" class="product-image"
+                     title="<?php echo $this->htmlEscape($_category->getName()) ?>">
+                       <?php $imageUrl = $this->getImage($_category) ?>
+                       <?php if (!$resizeImage = $this->getResizeImage()): ?>
+                         <?php
+                         $style = '';
+                         if (!empty($width)):
+                           $style = 'width: ' . (is_numeric($width) ? $width . 'px' : $width);
+                         elseif (!empty($height)):
+                           $style = 'height: ' . (is_numeric($height) ? $height . 'px' : $height);
+                         endif;
+                         ?>
+                      <img src="<?php echo $this->getImage($_category) ?>"
+                           style="<?php echo $style ?>" alt="<?php echo $this->htmlEscape($_category->getName()) ?>"
+                           />
+                         <?php else: ?>
+                      <img src="<?php echo $imager->resize($imageUrl, $width, $height) ?>"
+                           srcset="<?php echo $imager->resize($imageUrl, $width, $height) ?> 1x, <?php
+                           echo $imager->resize($imageUrl, $width * 2, $height * 2)
+                           ?> 2x"
+                           width="<?php echo $width ?>"
+                           height="<?php echo $height ?>"
+                           alt="<?php echo $this->htmlEscape($_category->getName()) ?>"
+                           />
+                         <?php endif; ?>
+                  </a>
+                <?php endif; ?>
+              </div>
+              <div class="tile-content">
+                <div class="tile-name">
+                  <h5 class="category-name parent-category"><a href="<?php echo $_category->getUrl() ?>" title="<?php echo $this->htmlEscape($_category->getName()) ?>"><?php echo $this->htmlEscape($_category->getName()) ?></a></h5>
+                </div>
+                <div class="tile-subcategories">
+                  <?php
+                  if ($maxSubcategoryCount) :
+                    $j = 0;
+                    $_subcategories = $_category->getSubcategories();
+                    $_count = count($_subcategories);
+                    // display More link, if more than one subcategory is not shown, otherwise - display last category
+                    $_displayMoreLink = $_count > $maxSubcategoryCount + 1;
+                    if ($_count) :
+                      ?>
+                      <ul class="list-subcategories">
+                        <?php foreach ($_subcategories as $_subcategory) : ?>
+                          <?php if ($_displayMoreLink && ($j > $maxSubcategoryCount - 1)): ?>
+                            <li>
+                              <a href="<?php echo $_category->getUrl() ?>" title="<?php echo $this->htmlEscape($_category->getName()) ?>" class="link-more"><?php
+                                echo $this->__('More in %s...', $this->htmlEscape($_category->getName()));
+                                ?></a>
+                            </li>
+                            <?php break; ?>
+                          <?php endif; ?>
+                          <li>
+                            <a href="<?php echo $_subcategory->getUrl() ?>"
+                               title="<?php echo $this->htmlEscape($_subcategory->getName()) ?>"
+                               class="category-name child-category"><?php
+                                 echo $this->htmlEscape($_subcategory->getName());
+                                 ?></a>
+                          </li>
+                          <?php $j++; ?>
+                        <?php endforeach; ?>
+                      </ul>
+                    <?php endif; ?>
+                  <?php endif; ?>
+                </div>
+              </div>
+            </li>
+          <?php endforeach; ?>
+        </ul>
+      </div>
+
+      <p class="jcarousel-pagination"></p>
+    </div>
+  <?php endif; ?>
+</div>
+<div class="clearfix"></div>
+<!--
+<script type="text/javascript">decorateGeneric($$('ul li.jcarousel-tile'), ['odd', 'even', 'first', 'last']);</script>
+-->
