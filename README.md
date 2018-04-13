@@ -14,6 +14,11 @@ Can be placed anywhere you want to indicate relation to the carousel's category
 (ie. 'related categories'). same powerful filtering option as default widget.
 current skinning is in-house.
 Designed on Magento's RWD theme.
+(WIP) displays accomodated: < 480px and regular Desktop (assumes >700px but allows fallback to max-width:100%).
+ TODO: mobile horizontal (~640px) needs some tweaking to look good.
+Restrictions: html uses div Ids and css/js selectors use div Ids, so can only use one widget per page and keep HTML valid.
+(if you need multiple of these in any one page, then you need to modify where appropriate. It'll look bad though)
+
 
 
 jcarousel needs to be loaded seperately
